@@ -1,0 +1,515 @@
+{
+  "id": "fcd7f64f-cfc0-4b43-a4fb-a345ad915f9f",
+  "prevId": "f1a15fc1-9283-46ab-ae6b-885eb2fbb5b0",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.Users": {
+      "name": "Users",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "First_name": {
+          "name": "First_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Middle_name": {
+          "name": "Middle_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Last_name": {
+          "name": "Last_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Username": {
+          "name": "Username",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Password": {
+          "name": "Password",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Company": {
+          "name": "Company",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Email": {
+          "name": "Email",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Phone": {
+          "name": "Phone",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Created_at": {
+          "name": "Created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "Updated_at": {
+          "name": "Updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Deleted_at": {
+          "name": "Deleted_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Is_deleted": {
+          "name": "Is_deleted",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "Updated_by": {
+          "name": "Updated_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Deleted_by": {
+          "name": "Deleted_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Created_by": {
+          "name": "Created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Users_Updated_by_Users_id_fk": {
+          "name": "Users_Updated_by_Users_id_fk",
+          "tableFrom": "Users",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "Updated_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "Users_Deleted_by_Users_id_fk": {
+          "name": "Users_Deleted_by_Users_id_fk",
+          "tableFrom": "Users",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "Deleted_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "Users_Created_by_Users_id_fk": {
+          "name": "Users_Created_by_Users_id_fk",
+          "tableFrom": "Users",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "Created_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "Users_Username_unique": {
+          "name": "Users_Username_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Username"
+          ]
+        },
+        "Users_Email_unique": {
+          "name": "Users_Email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Email"
+          ]
+        },
+        "Users_Phone_unique": {
+          "name": "Users_Phone_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Phone"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.Courses": {
+      "name": "Courses",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "Course_title": {
+          "name": "Course_title",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Prerequests": {
+          "name": "Prerequests",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Course_description": {
+          "name": "Course_description",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Course_objective": {
+          "name": "Course_objective",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Created_at": {
+          "name": "Created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "Updated_at": {
+          "name": "Updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Deleted_at": {
+          "name": "Deleted_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Is_deleted": {
+          "name": "Is_deleted",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "Updated_by": {
+          "name": "Updated_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Deleted_by": {
+          "name": "Deleted_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Created_by": {
+          "name": "Created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Courses_Updated_by_Users_id_fk": {
+          "name": "Courses_Updated_by_Users_id_fk",
+          "tableFrom": "Courses",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "Updated_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "Courses_Deleted_by_Users_id_fk": {
+          "name": "Courses_Deleted_by_Users_id_fk",
+          "tableFrom": "Courses",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "Deleted_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "Courses_Created_by_Users_id_fk": {
+          "name": "Courses_Created_by_Users_id_fk",
+          "tableFrom": "Courses",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "Created_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "Courses_Course_title_unique": {
+          "name": "Courses_Course_title_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Course_title"
+          ]
+        },
+        "Courses_Course_objective_unique": {
+          "name": "Courses_Course_objective_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Course_objective"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.Trainigs": {
+      "name": "Trainigs",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "Course_id": {
+          "name": "Course_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Trainig_mode": {
+          "name": "Trainig_mode",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Training_location": {
+          "name": "Training_location",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Trainig_name": {
+          "name": "Trainig_name",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Trainig_start_date": {
+          "name": "Trainig_start_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Trainig_end_date": {
+          "name": "Trainig_end_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Enrolment_deadline": {
+          "name": "Enrolment_deadline",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Capacity": {
+          "name": "Capacity",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Cost": {
+          "name": "Cost",
+          "type": "double precision",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "Created_at": {
+          "name": "Created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "now()"
+        },
+        "Updated_at": {
+          "name": "Updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Deleted_at": {
+          "name": "Deleted_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Is_deleted": {
+          "name": "Is_deleted",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": false,
+          "default": false
+        },
+        "Updated_by": {
+          "name": "Updated_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Deleted_by": {
+          "name": "Deleted_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "Created_by": {
+          "name": "Created_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "Trainigs_Course_id_Courses_id_fk": {
+          "name": "Trainigs_Course_id_Courses_id_fk",
+          "tableFrom": "Trainigs",
+          "tableTo": "Courses",
+          "columnsFrom": [
+            "Course_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "Trainigs_Updated_by_Users_id_fk": {
+          "name": "Trainigs_Updated_by_Users_id_fk",
+          "tableFrom": "Trainigs",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "Updated_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "Trainigs_Deleted_by_Users_id_fk": {
+          "name": "Trainigs_Deleted_by_Users_id_fk",
+          "tableFrom": "Trainigs",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "Deleted_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "Trainigs_Created_by_Users_id_fk": {
+          "name": "Trainigs_Created_by_Users_id_fk",
+          "tableFrom": "Trainigs",
+          "tableTo": "Users",
+          "columnsFrom": [
+            "Created_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "Trainigs_Trainig_name_unique": {
+          "name": "Trainigs_Trainig_name_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "Trainig_name"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
