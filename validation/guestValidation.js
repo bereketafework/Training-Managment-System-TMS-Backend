@@ -28,16 +28,15 @@ const guestValidation = Joi.object({
     "string.max": `" Last_name" should have a maximum length of {#limit}`,
     "any.required": `"  Last_name" is a required field`,
   }),
-
+  Phone: Joi.number().min(10).messages({
+    "number.base": "Phone number must be a number",
+  }),
   Qualification: Joi.string().min(3).max(30).required().messages({
     "string.base": `"Qualification" should be a type of 'text'`,
     "string.empty": `"Qualification" cannot be an empty field`,
     "string.min": `"Qualification" should have a minimum length of {#limit}`,
     "string.max": `"Qualification" should have a maximum length of {#limit}`,
     "any.required": `"Qualification" is a required field`,
-  }),
-  Phone: Joi.number().messages({
-    "number.base": "Phone number must be a number",
   }),
 });
 

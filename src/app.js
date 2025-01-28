@@ -15,6 +15,7 @@ app.use("/api/training", training);
 app.use("/api/Participant", Participant);
 app.use("/api/session", session);
 app.use("/api/guest", guest);
+
 const port = process.env.PORT;
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

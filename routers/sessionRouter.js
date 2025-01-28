@@ -1,6 +1,6 @@
 const express = require("express");
 const { hashPassword } = require("../validation/passHashing");
-const validateGuest = require("../validation/guestValidation");
+const validatesession = require("../validation/sessionValidation");
 const { Sessions } = require("../db/sessionSchema");
 const { eq, ilike, and } = require("drizzle-orm");
 
