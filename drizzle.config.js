@@ -14,6 +14,11 @@ module.exports = defineConfig({
     "./db/ParticipantSchema.js",
     "./db/sessionSchema.js",
     "./db/guestSchema.js",
+    "./db/categorySchema.js",
+    "./db/resourceSchema.js",
+    "./db/teamSchema.js",
+    "./db/userAssignmentSchema.js",
+    "./db/resourceAllocationSchema.js",
   ],
   dialect: "postgresql",
   dbCredentials: {
