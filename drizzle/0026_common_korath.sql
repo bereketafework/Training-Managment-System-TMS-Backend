@@ -1,0 +1,1 @@
+ALTER TABLE "Enrollments" DROP COLUMN "Complation_Date";

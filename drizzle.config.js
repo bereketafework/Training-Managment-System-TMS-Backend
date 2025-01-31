@@ -7,6 +7,7 @@ module.exports = defineConfig({
   migrationsFolder: "./db",
   driver: pg,
   out: "./drizzle",
+
   schema: [
     "./db/userSchema.js",
     "./db/courseSchema.js",
@@ -19,6 +20,8 @@ module.exports = defineConfig({
     "./db/teamSchema.js",
     "./db/userAssignmentSchema.js",
     "./db/resourceAllocationSchema.js",
+    "./db/attendanceSchema.js",
+    "./db/enrollmentSchema.js",
   ],
   dialect: "postgresql",
   dbCredentials: {
