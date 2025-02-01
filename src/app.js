@@ -14,6 +14,8 @@ const userassignment = require("../routers/userAssignmentRouter");
 const resourceallocation = require("../routers/resourceAllocationRouter");
 const attendance = require("../routers/attendanceRouter");
 const enrollment = require("../routers/enrollmentRouter");
+const sponsor = require("../routers/sponsorRouter");
+const paymentmethod = require("../routers/paymentMethodRouter");
 app.use(express.json());
 
 app.use("/api/user", users);
@@ -29,6 +31,9 @@ app.use("/api/userassignment", userassignment);
 app.use("/api/resourceallocation", resourceallocation);
 app.use("/api/attendance", attendance);
 app.use("/api/enrollment", enrollment);
+app.use("/api/sponsor", sponsor);
+
+app.use("/api/paymentmethod", paymentmethod);
 const port = process.env.PORT;
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
