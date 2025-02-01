@@ -24,6 +24,12 @@ module.exports = defineConfig({
     "./db/enrollmentSchema.js",
     "./db/sponsorSchema.js",
     "./db/paymentMethodSchema.js",
+    "./db/paymentSchema.js",
+    "./db/sponsorshipSchema.js",
+    "./db/userRolesSchema.js",
+    "./db/certificateSchema.js",
+    "./db/allwoanceSchema.js",
+    "./db/teamRoleSchema.js",
   ],
   dialect: "postgresql",
   dbCredentials: {

@@ -1,0 +1,2 @@
+ALTER TABLE "Users" ADD COLUMN "Created_by" uuid NOT NULL;--> statement-breakpoint
+ALTER TABLE "Users" ADD CONSTRAINT "Users_Created_by_Users_id_fk" FOREIGN KEY ("Created_by") REFERENCES "public"."Users"("id") ;

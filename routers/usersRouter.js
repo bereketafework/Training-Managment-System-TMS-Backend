@@ -34,7 +34,7 @@ router.post("/create", validateUser, verifyToken, async (req, res) => {
     res.status(200).send(result);
   } catch (error) {
     console.error(error);
-    res.status(500).send(error);
+    res.status(500).json({ error: "An unexpected error occurred" });
   }
 });
 // login a user and checking users information and also Sign a Token
@@ -94,7 +94,6 @@ router.post("/update/:id", verifyToken, async (req, res) => {
 
     const existingUser = existingUserArray[0];
 
-    // Filter updated data to only include fields that are actually changed (excluding password)
     const filteredUpdatedData = {};
     Object.keys(updatedUserData).forEach((key) => {
       if (key === "password") return; // Ignore password updates
@@ -103,12 +102,10 @@ router.post("/update/:id", verifyToken, async (req, res) => {
       }
     });
 
-    // If no fields have changed, return early
     if (Object.keys(filteredUpdatedData).length === 0) {
       return res.status(200).json({ message: "No changes detected" });
     }
 
-    // Perform the update
     await db
       .update(Users)
       .set({
@@ -118,13 +115,12 @@ router.post("/update/:id", verifyToken, async (req, res) => {
       })
       .where(eq(Users.id, UsersId));
 
-    // Respond with success message and updated fields
     res.status(200).json({
-      message: Object.keys(filteredUpdatedData) + " successfully updated", // Include the updated fields in the response
+      message: Object.keys(filteredUpdatedData) + " successfully updated",
     });
   } catch (err) {
     console.error("Error updating user data:", err);
-    res.status(500).send(err.message);
+    res.status(500).json({ error: "An unexpected error occurred" });
   }
 });
 
@@ -155,7 +151,7 @@ router.post("/delete/:id", verifyToken, async (req, res) => {
     }
     res.status(200).send("Successfully deleted");
   } catch (err) {
-    res.status(500).send(err.message);
+    res.status(500).json({ error: "An unexpected error occurred" });
   }
 });
 //list of deleted users
@@ -206,7 +202,12 @@ router.get("/search/:id", verifyToken, async (req, res) => {
   const { id } = req.params;
   try {
     const result = await db
-      .select()
+      .select({
+        First_name: Users.First_name,
+        Middle_name: Users.Middle_name,
+        Last_name: Users.Last_name,
+        Usersname: Users.Username,
+      })
       .from(Users)
       .where(and(eq(Users.Is_deleted, false), eq(Users.id, id)));
     if (result.length === 0) {
@@ -215,7 +216,7 @@ router.get("/search/:id", verifyToken, async (req, res) => {
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).send(error + "");
+    res.status(500).json({ error: "An unexpected error occurred" });
   }
 });
 

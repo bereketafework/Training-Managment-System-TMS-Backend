@@ -35,7 +35,7 @@ router.post("/create", validateCategory, verifyToken, async (req, res) => {
     res.status(200).send(result);
   } catch (error) {
     console.error(error);
-    res.status(500).send(err.message);
+    res.status(500).json({ error: "An unexpected error occurred" });
   }
 });
 
@@ -94,7 +94,7 @@ router.post("/update/:id", verifyToken, async (req, res) => {
     });
   } catch (err) {
     console.error("Error updating Guest data:", err);
-    res.status(500).send(err.message);
+    res.status(500).json({ error: "An unexpected error occurred" });
   }
 });
 
@@ -125,7 +125,7 @@ router.post("/delete/:id", verifyToken, async (req, res) => {
     }
     res.status(200).send("Successfully deleted");
   } catch (err) {
-    res.status(500).send(err.message);
+    res.status(500).json({ error: "An unexpected error occurred" });
   }
 });
 
@@ -174,7 +174,7 @@ router.get("/search/:id", verifyToken, async (req, res) => {
   const { id } = req.params;
   try {
     const result = await db
-      .select()
+      .select({ Name: Categories.Name })
       .from(Categories)
       .where(and(eq(Categories.Is_deleted, false), eq(Categories.id, id)));
     if (result.length === 0) {
@@ -183,7 +183,7 @@ router.get("/search/:id", verifyToken, async (req, res) => {
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).send(error + "");
+    res.status(500).json({ error: "An unexpected error occurred" });
   }
 });
 

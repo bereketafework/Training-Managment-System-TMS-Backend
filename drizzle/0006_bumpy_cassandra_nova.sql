@@ -1,0 +1,1 @@
+ALTER TABLE "Users" ALTER COLUMN "Created_by" DROP NOT NULL;

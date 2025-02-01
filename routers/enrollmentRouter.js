@@ -13,16 +13,6 @@ const validateEnrollment = require("../validation/enrollmentValidation");
 config();
 
 // create a new users also validate a users data and Check Token
-router.post("/test", verifyToken, async (req, res) => {
-  try {
-    res.status(200).send("result");
-  } catch (error) {
-    console.error(error);
-    res.status(500).send(err.message);
-  }
-});
-
-// create a new users also validate a users data and Check Token
 router.post("/create", validateEnrollment, verifyToken, async (req, res) => {
   const data = req.body;
   const { user: idFromToken } = req;
@@ -44,7 +34,7 @@ router.post("/create", validateEnrollment, verifyToken, async (req, res) => {
     res.status(200).send(result);
   } catch (error) {
     console.error(error);
-    res.status(500).send(error);
+    res.status(500).json({ error: "An unexpected error occurred" });
   }
 });
 
@@ -103,7 +93,7 @@ router.post("/update/:id", verifyToken, async (req, res) => {
     });
   } catch (err) {
     console.error("Error updating Guest data:", err);
-    res.status(500).send(err.message);
+    res.status(500).json({ error: "An unexpected error occurred" });
   }
 });
 
@@ -134,7 +124,7 @@ router.post("/delete/:id", verifyToken, async (req, res) => {
     }
     res.status(200).send("Successfully deleted");
   } catch (err) {
-    res.status(500).send(err.message);
+    res.status(500).json({ error: "An unexpected error occurred" });
   }
 });
 
@@ -187,7 +177,7 @@ router.get("/search/:id", verifyToken, async (req, res) => {
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).send(error + "");
+    res.status(500).json({ error: "An unexpected error occurred" });
   }
 });
 

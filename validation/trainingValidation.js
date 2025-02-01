@@ -1,12 +1,7 @@
 const Joi = require("joi");
 
 const trainingValidation = Joi.object({
-  Course_id: Joi.string().uuid().required().messages({
-    "string.base": `"course_id" should be a type of 'text'`,
-    "string.empty": `"course_id" cannot be an empty field`,
-    "string.guid": `"course_id" should be a valid UUID`,
-    "any.required": `"course_id" is a required field`,
-  }),
+  Course_id: Joi.string().uuid().required(),
   Training_name: Joi.string().min(3).max(30).required().messages({
     "string.base": `"training_name" should be a type of 'text'`,
     "string.empty": `"training_name" cannot be an empty field`,

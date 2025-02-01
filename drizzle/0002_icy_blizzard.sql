@@ -1,1 +1,0 @@
-ALTER TABLE "Users" RENAME COLUMN "is_Deleted" TO "Is_deleted";

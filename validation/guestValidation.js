@@ -1,12 +1,7 @@
 const Joi = require("joi");
 
 const guestValidation = Joi.object({
-  Session_id: Joi.string().uuid().required().messages({
-    "string.base": `"Session_id" should be a type of 'text'`,
-    "string.empty": `"Session_id" cannot be an empty field`,
-    "string.guid": `"Session_id" should be a valid UUID`,
-    "any.required": `"Session_id" is a required field`,
-  }),
+  Session_id: Joi.string().uuid().required(),
   First_name: Joi.string().min(3).max(30).required().messages({
     "string.base": `" First_name" should be a type of 'text'`,
     "string.empty": `" First_name" cannot be an empty field`,
@@ -28,7 +23,7 @@ const guestValidation = Joi.object({
     "string.max": `" Last_name" should have a maximum length of {#limit}`,
     "any.required": `"  Last_name" is a required field`,
   }),
-  Phone: Joi.number().min(10).messages({
+  Phone: Joi.number().min(10).required().messages({
     "number.base": "Phone number must be a number",
   }),
   Qualification: Joi.string().min(3).max(30).required().messages({

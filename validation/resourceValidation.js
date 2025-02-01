@@ -1,12 +1,7 @@
 const Joi = require("joi");
 
 const resourceValidation = Joi.object({
-  Category_id: Joi.string().uuid().required().messages({
-    "string.base": `"Category_id" should be a type of 'text'`,
-    "string.empty": `"Category_id" cannot be an empty field`,
-    "string.guid": `"Category_id" should be a valid UUID`,
-    "any.required": `"Category_id" is a required field`,
-  }),
+  Category_id: Joi.string().uuid().required(),
   Name: Joi.string().min(3).max(30).required().messages({
     "string.base": `" Name" should be a type of 'text'`,
     "string.empty": `" Name" cannot be an empty field`,

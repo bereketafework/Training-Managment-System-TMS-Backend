@@ -1,18 +1,8 @@
 const Joi = require("joi");
 
 const ResourceAllocationValidation = Joi.object({
-  Resource_id: Joi.string().uuid().required().messages({
-    "string.base": `"Resource_id" should be a type of 'text'`,
-    "string.empty": `"Resource_id" cannot be an empty field`,
-    "string.guid": `"Resource_id" should be a valid UUID`,
-    "any.required": `"Resource_id" is a required field`,
-  }),
-  Session_id: Joi.string().uuid().required().messages({
-    "string.base": `"Session_id" should be a type of 'text'`,
-    "string.empty": `"Session_id" cannot be an empty field`,
-    "string.guid": `"Session_id" should be a valid UUID`,
-    "any.required": `"Session_id" is a required field`,
-  }),
+  Resource_id: Joi.string().uuid().required(),
+  Session_id: Joi.string().uuid().required(),
   Quantity: Joi.number().required().messages({
     "number.base": `"Quantity" should be a type of 'number'`,
     "any.required": `"Quantity" is a required field`,

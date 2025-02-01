@@ -1,0 +1,1 @@
+ALTER TABLE "Courses" DROP CONSTRAINT "Courses_Course_objective_unique";

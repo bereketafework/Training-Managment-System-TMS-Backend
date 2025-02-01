@@ -50,7 +50,7 @@ const userValidation = Joi.object({
     "string.max": `"Email" should have a maximum length of {#limit}`,
     "any.required": `"Email" is a required field`,
   }),
-  Phone: Joi.number().messages({
+  Phone: Joi.number().required().messages({
     "number.base": "Phone number must be a number",
   }),
 });

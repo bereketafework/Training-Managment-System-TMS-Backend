@@ -29,64 +29,66 @@ router.post("/create", validateCourse, verifyToken, async (req, res) => {
     res.status(200).send(result);
   } catch (error) {
     console.error(error);
-    res.status(500).send(error);
+    res.status(500).json({ error: "An unexpected error occurred" });
   }
 });
 //update user information and display updated fields
+// update user Information by user id
 router.post("/update/:id", verifyToken, async (req, res) => {
-  const updatedCourseData = req.body;
-  const courseId = req.params.id;
-  const { user: idFromToken } = req;
+  const updatedData = req.body; // Incoming user data
+  const UsersId = req.params.id; // User ID from the route
+  const { user: idFromToken } = req; // User info from token
 
   if (!idFromToken || !idFromToken.id) {
     return res.status(400).json({ error: "Invalid token data." });
   }
 
-  const userId = idFromToken.id;
+  const userid = idFromToken.id;
 
   try {
-    // Fetch the existing course data
-    const existingCourseArray = await db
+    // Fetch the existing user data
+    const existingArray = await db
       .select()
       .from(Courses)
-      .where(eq(Courses.id, courseId));
+      .where(eq(Courses.id, UsersId));
 
-    // Ensure the course exists
-    if (!existingCourseArray || existingCourseArray.length === 0) {
-      return res.status(404).json({ error: "Course not found" });
+    if (!existingArray || existingArray.length === 0) {
+      return res.status(404).json({ error: "Courses not found" });
     }
 
-    const existingCourse = existingCourseArray[0]; // Extract the first (and only) result
+    const Is_existing = existingArray[0];
 
-    // Filter out only the data that has changed
+    // Filter updated data to only include fields that are actually changed (excluding password)
     const filteredUpdatedData = {};
-    Object.keys(updatedCourseData).forEach((key) => {
-      if (updatedCourseData[key] !== existingCourse[key]) {
-        filteredUpdatedData[key] = updatedCourseData[key];
+    Object.keys(updatedData).forEach((key) => {
+      if (key === "password") return; // Ignore password updates
+      if (updatedData[key] !== Is_existing[key]) {
+        filteredUpdatedData[key] = updatedData[key];
       }
     });
 
-    // Check if there are any changes
+    // If no fields have changed, return early
     if (Object.keys(filteredUpdatedData).length === 0) {
       return res.status(200).json({ message: "No changes detected" });
     }
 
-    // Perform the update with only the changed data
-    const result = await db
+    // Perform the update
+    await db
       .update(Courses)
       .set({
-        ...filteredUpdatedData, // Only the changed fields
-        Updated_by: userId,
-        Updated_at: new Date(), // Track the update time
+        ...filteredUpdatedData,
+        Updated_by: userid,
+        Updated_at: new Date(),
       })
-      .where(eq(Courses.id, courseId));
+      .where(eq(Courses.id, UsersId));
 
+    // Respond with success message and updated fields
     res.status(200).json({
-      message: Object.keys(filteredUpdatedData) + "Successfully updated", // Only the changed fields
+      message: Object.keys(filteredUpdatedData) + " successfully updated", // Include the updated fields in the response
     });
   } catch (err) {
-    console.error("Error updating course:", err);
-    res.status(500).json({ error: "Internal server error" });
+    console.error("Error updating Guest data:", err);
+    res.status(500).json({ error: "An unexpected error occurred" });
   }
 });
 
@@ -112,7 +114,7 @@ router.post("/delete/:id", verifyToken, async (req, res) => {
     }
     res.status(200).send("Successfully deleted");
   } catch (err) {
-    res.status(500).send(err.message);
+    res.status(500).json({ error: "An unexpected error occurred" });
   }
 });
 
@@ -160,7 +162,11 @@ router.get("/search/:id", verifyToken, async (req, res) => {
   const { id } = req.params;
   try {
     const result = await db
-      .select()
+      .select({
+        Course_title: Courses.Course_title,
+        Course_objective: Courses.Course_objective,
+        Prerequests: Courses.Prerequests,
+      })
       .from(Courses)
       .where(and(eq(Courses.Is_deleted, false), eq(Courses.id, id)));
     if (result.length === 0) {
@@ -169,7 +175,7 @@ router.get("/search/:id", verifyToken, async (req, res) => {
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).send(error + "");
+    res.status(500).json({ error: "An unexpected error occurred" });
   }
 });
 

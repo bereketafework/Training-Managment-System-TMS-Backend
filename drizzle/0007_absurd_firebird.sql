@@ -1,0 +1,2 @@
+ALTER TABLE "Users" ALTER COLUMN "Created_by" SET NOT NULL;--> statement-breakpoint
+ALTER TABLE "Users" ADD CONSTRAINT "Users_Created_by_Users_id_fk" FOREIGN KEY ("Created_by") REFERENCES "public"."Users"("id") ON DELETE no action ON UPDATE no action;

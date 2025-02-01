@@ -16,6 +16,12 @@ const attendance = require("../routers/attendanceRouter");
 const enrollment = require("../routers/enrollmentRouter");
 const sponsor = require("../routers/sponsorRouter");
 const paymentmethod = require("../routers/paymentMethodRouter");
+const payment = require("../routers/paymentRouter");
+const sponsorship = require("../routers/sponsorshipRouter");
+const userrole = require("../routers/userRoleRouter");
+const certificate = require("../routers/certificateRouter");
+const allwoance = require("../routers/allwoanceRouter");
+const teamrole = require("../routers/teamRoleRouter");
 app.use(express.json());
 
 app.use("/api/user", users);
@@ -32,8 +38,19 @@ app.use("/api/resourceallocation", resourceallocation);
 app.use("/api/attendance", attendance);
 app.use("/api/enrollment", enrollment);
 app.use("/api/sponsor", sponsor);
-
+app.use("/api/sponsorship", sponsorship);
 app.use("/api/paymentmethod", paymentmethod);
+app.use("/api/payment", payment);
+app.use("/api/userrole", userrole);
+app.use("/api/certificate", certificate);
+app.use("/api/allwoance", allwoance);
+app.use("/api/teamrole", teamrole);
+
+app.use((err, req, res, next) => {
+  console.error("Unhandled error:", err);
+  res.status(500).json({ error: "An unexpected error occurred" });
+});
+
 const port = process.env.PORT;
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

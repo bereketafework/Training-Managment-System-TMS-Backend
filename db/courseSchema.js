@@ -13,7 +13,7 @@ const Courses = pgTable("Courses", {
   Course_title: varchar().notNull().unique(),
   Prerequests: varchar(),
   Course_description: varchar().notNull(),
-  Course_objective: varchar().unique().notNull(),
+  Course_objective: varchar().notNull(),
   Created_at: timestamp().defaultNow(),
   Updated_at: timestamp(),
   Deleted_at: timestamp(),

@@ -1,1 +1,0 @@
-ALTER TABLE "Enrollments" RENAME COLUMN "Compation_Date" TO "Complation_Date";
