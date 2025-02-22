@@ -115,7 +115,7 @@ router.post("/update/:id", verifyToken, async (req, res) => {
     res.status(200).json({
       message: Object.keys(filteredUpdatedData) + " successfully updated", // Include the updated fields in the response
     });
-  } catch (err) {
+  } catch (error) {
     console.error("Error updating Guest data:", err);
     if (error.code) {
       switch (error.code) {
@@ -165,7 +165,7 @@ router.post("/delete/:id", verifyToken, async (req, res) => {
       return res.status(404).json({ message: "No data available" });
     }
     res.status(200).send("Successfully deleted");
-  } catch (err) {
+  } catch (error) {
     if (error.code) {
       switch (error.code) {
         case "23505": // Unique violation
