@@ -94,7 +94,25 @@ router.post("/update/:id", verifyToken, async (req, res) => {
     });
   } catch (err) {
     console.error("Error updating Guest data:", err);
-    res.status(500).json({ error: "An unexpected error occurred" });
+    if (error.code) {
+      switch (error.code) {
+        case "23505": // Unique violation
+          res.status(400).json({ error: "Duplicate entry detected." });
+          break;
+        case "23503": // Foreign key violation
+          res.status(400).json({ error: "Invalid foreign key reference." });
+          break;
+        case "23502": // Not null violation
+          res.status(400).json({ error: "Missing required field." });
+          break;
+        default:
+          res
+            .status(500)
+            .json({ error: "An unexpected database error occurred." });
+      }
+    } else {
+      res.status(500).json({ error: "An unexpected error occurred." });
+    }
   }
 });
 
@@ -125,7 +143,25 @@ router.post("/delete/:id", verifyToken, async (req, res) => {
     }
     res.status(200).send("Successfully deleted");
   } catch (err) {
-    res.status(500).json({ error: "An unexpected error occurred" });
+    if (error.code) {
+      switch (error.code) {
+        case "23505": // Unique violation
+          res.status(400).json({ error: "Duplicate entry detected." });
+          break;
+        case "23503": // Foreign key violation
+          res.status(400).json({ error: "Invalid foreign key reference." });
+          break;
+        case "23502": // Not null violation
+          res.status(400).json({ error: "Missing required field." });
+          break;
+        default:
+          res
+            .status(500)
+            .json({ error: "An unexpected database error occurred." });
+      }
+    } else {
+      res.status(500).json({ error: "An unexpected error occurred." });
+    }
   }
 });
 
@@ -178,7 +214,25 @@ router.get("/search/:id", verifyToken, async (req, res) => {
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "An unexpected error occurred" });
+    if (error.code) {
+      switch (error.code) {
+        case "23505": // Unique violation
+          res.status(400).json({ error: "Duplicate entry detected." });
+          break;
+        case "23503": // Foreign key violation
+          res.status(400).json({ error: "Invalid foreign key reference." });
+          break;
+        case "23502": // Not null violation
+          res.status(400).json({ error: "Missing required field." });
+          break;
+        default:
+          res
+            .status(500)
+            .json({ error: "An unexpected database error occurred." });
+      }
+    } else {
+      res.status(500).json({ error: "An unexpected error occurred." });
+    }
   }
 });
 

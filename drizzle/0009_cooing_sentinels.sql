@@ -1,0 +1,1 @@
+ALTER TABLE "Trainings" ADD COLUMN "Price" double precision NOT NULL;

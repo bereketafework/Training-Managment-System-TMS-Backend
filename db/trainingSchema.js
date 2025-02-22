@@ -64,6 +64,7 @@ const Trainings = pgTable("Trainings", {
   Training_end_date: date().notNull(),
   Enrolment_deadline: date().notNull(),
   Capacity: integer().notNull(),
+  Price: doublePrecision().notNull(),
   Created_at: timestamp().defaultNow(),
   Updated_at: timestamp(),
   Deleted_at: timestamp(),

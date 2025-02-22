@@ -22,6 +22,8 @@ const userrole = require("../routers/userRoleRouter");
 const certificate = require("../routers/certificateRouter");
 const allwoance = require("../routers/allwoanceRouter");
 const teamrole = require("../routers/teamRoleRouter");
+const cors = require("cors");
+app.use(cors());
 app.use(express.json());
 
 app.use("/api/user", users);
