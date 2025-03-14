@@ -22,7 +22,9 @@ const userrole = require("../routers/userRoleRouter");
 const certificate = require("../routers/certificateRouter");
 const allwoance = require("../routers/allwoanceRouter");
 const teamrole = require("../routers/teamRoleRouter");
+const GuestAssign = require("../routers/guestAssignRouter");
 const cors = require("cors");
+
 app.use(cors());
 app.use(express.json());
 
@@ -32,6 +34,7 @@ app.use("/api/training", training);
 app.use("/api/Participant", Participant);
 app.use("/api/session", session);
 app.use("/api/guest", guest);
+app.use("/api/guestassign", GuestAssign);
 app.use("/api/category", category);
 app.use("/api/resource", resource);
 app.use("/api/team", team);

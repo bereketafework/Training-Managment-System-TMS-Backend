@@ -215,12 +215,7 @@ router.get("/deleted", verifyToken, async (req, res) => {
 router.get("/all", verifyToken, async (req, res) => {
   try {
     const result = await db
-      .select({
-        First_name: Users.First_name,
-        Middle_name: Users.Middle_name,
-        Last_name: Users.Last_name,
-        Usersname: Users.Username,
-      })
+      .select()
       .from(Users)
       .where(eq(Users.Is_deleted, false))
       .orderBy(Users.First_name, Users.Middle_name, Users.Last_name);

@@ -10,8 +10,44 @@ const verifyToken = require("../middleware/verifyTokens");
 const router = express.Router();
 router.use(express.json());
 const { config } = require("dotenv");
+const { Trainings } = require("../db/trainingSchema");
 
 config();
+
+router.post("/select", verifyToken, async (req, res) => {
+  const { tid } = req.body;
+
+  try {
+    const result = await db
+      .select()
+      .from(Sessions)
+      .where(
+        and(eq(Sessions.Is_deleted, false), eq(Sessions.Training_id, tid))
+      );
+    res.status(200).send(result);
+  } catch (error) {
+    console.error(error);
+    if (error.code) {
+      switch (error.code) {
+        case "23505": // Unique violation
+          res.status(400).json({ error: "Duplicate entry detected." });
+          break;
+        case "23503": // Foreign key violation
+          res.status(400).json({ error: "Invalid foreign key reference." });
+          break;
+        case "23502": // Not null violation
+          res.status(400).json({ error: "Missing required field." });
+          break;
+        default:
+          res
+            .status(500)
+            .json({ error: "An unexpected database error occurred." });
+      }
+    } else {
+      res.status(500).json({ error: "An unexpected error occurred." });
+    }
+  }
+});
 
 router.post("/create", validatesession, verifyToken, async (req, res) => {
   const tdata = req.body;
@@ -198,8 +234,12 @@ router.get("/deleted", verifyToken, async (req, res) => {
 router.get("/all", verifyToken, async (req, res) => {
   try {
     const result = await db
-      .select({ Topic: Sessions.Topic, Duration: Sessions.Duration })
+      .select({
+        ...Sessions,
+        Training: Trainings,
+      })
       .from(Sessions)
+      .innerJoin(Trainings, eq(Trainings.id, Sessions.Training_id))
       .where(eq(Sessions.Is_deleted, false));
 
     if (result.length === 0) {

@@ -15,6 +15,7 @@ module.exports = defineConfig({
     "./db/ParticipantSchema.js",
     "./db/sessionSchema.js",
     "./db/guestSchema.js",
+    "./db/guestAssignSchema.js",
     "./db/categorySchema.js",
     "./db/resourceSchema.js",
     "./db/teamSchema.js",

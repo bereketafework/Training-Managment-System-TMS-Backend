@@ -1,7 +1,6 @@
 const Joi = require("joi");
 
 const guestValidation = Joi.object({
-  Session_id: Joi.string().uuid().required(),
   First_name: Joi.string().min(3).max(30).required().messages({
     "string.base": `" First_name" should be a type of 'text'`,
     "string.empty": `" First_name" cannot be an empty field`,

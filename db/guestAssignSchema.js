@@ -1,5 +1,8 @@
+// Desc: Schema for Guests table
+const { Sessions } = require("./sessionSchema");
 const { Users } = require("./userSchema");
 const { Trainings } = require("./trainingSchema");
+const { Guests } = require("./guestSchema");
 const {
   integer,
   pgTable,
@@ -7,20 +10,12 @@ const {
   timestamp,
   boolean,
   uuid,
-  date,
-  doublePrecision,
-  time,
 } = require("drizzle-orm/pg-core");
-
-const Sessions = pgTable("Sessions", {
-  id: uuid().defaultRandom().primaryKey().notNull(),
-  Training_id: uuid()
-    .notNull()
-    .references(() => Trainings.id),
-
-  Topic: varchar().notNull(),
-  Session_start_date: timestamp().notNull(),
-  Session_end_date: timestamp().notNull(),
+const GuestAssign = pgTable("GuestAssign", {
+  id: uuid().defaultRandom().primaryKey(),
+  Training_id: uuid().references(() => Trainings.id),
+  Sessions_id: uuid().references(() => Sessions.id),
+  Guest_id: uuid().references(() => Guests.id),
   Created_at: timestamp().defaultNow(),
   Updated_at: timestamp(),
   Deleted_at: timestamp(),
@@ -32,4 +27,4 @@ const Sessions = pgTable("Sessions", {
     .references(() => Users.id),
 });
 
-module.exports = { Sessions };
+module.exports = { GuestAssign };

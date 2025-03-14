@@ -9,6 +9,8 @@ router.use(express.json());
 const { config } = require("dotenv");
 const validateTraining = require("../validation/trainingValidation");
 const { validate } = require("uuid");
+const { Courses } = require("../db/courseSchema");
+const { Users } = require("../db/userSchema");
 
 config();
 
@@ -103,8 +105,25 @@ router.post("/update/:id", verifyToken, async (req, res) => {
       message: Object.keys(filteredUpdatedData) + " Successfully updated",
     });
   } catch (error) {
-    console.error("Error updating course:", error);
-    res.status(500).json({ error: "Internal server error" });
+    if (error.code) {
+      switch (error.code) {
+        case "23505": // Unique violation
+          res.status(400).json({ error: "Duplicate entry detected." });
+          break;
+        case "23503": // Foreign key violation
+          res.status(400).json({ error: "Invalid foreign key reference." });
+          break;
+        case "23502": // Not null violation
+          res.status(400).json({ error: "Missing required field." });
+          break;
+        default:
+          res
+            .status(500)
+            .json({ error: "An unexpected database error occurred." });
+      }
+    } else {
+      res.status(500).json({ error: "An unexpected error occurred." });
+    }
   }
 });
 
@@ -174,9 +193,13 @@ router.get("/deleted", verifyToken, async (req, res) => {
 router.get("/all", verifyToken, async (req, res) => {
   try {
     const result = await db
-      .select()
+      .select({
+        ...Trainings,
+        Courses: Courses,
+      })
       .from(Trainings)
       .where(eq(Trainings.Is_deleted, false))
+      .innerJoin(Courses, eq(Courses.id, Trainings.Course_id))
       .orderBy(Trainings.Training_name);
     if (result.length === 0) {
       return res.status(404).json({ message: "No data available" });
@@ -192,15 +215,21 @@ router.get("/search/:id", verifyToken, async (req, res) => {
   const { id } = req.params;
   try {
     const result = await db
-      .select()
+      .select({
+        ...Trainings,
+        Courses: Courses,
+        CreatedBy: Users,
+      })
       .from(Trainings)
-      .where(and(eq(Trainings.Is_deleted, false), eq(Trainings.id, id)));
+      .where(and(eq(Trainings.Is_deleted, false), eq(Trainings.id, id)))
+      .innerJoin(Users, eq(Users.id, Trainings.Created_by))
+      .innerJoin(Courses, eq(Courses.id, Trainings.Course_id));
+
     if (result.length === 0) {
       return res.status(404).json({ message: "No data available" });
     }
     res.status(201).json(result);
   } catch (error) {
-    console.error(error);
     if (error.code) {
       switch (error.code) {
         case "23505": // Unique violation

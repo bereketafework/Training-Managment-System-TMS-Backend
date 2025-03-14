@@ -207,9 +207,7 @@ router.get("/deleted", verifyToken, async (req, res) => {
 router.get("/all", verifyToken, async (req, res) => {
   try {
     const result = await db
-      .select({
-        Name: Categories.Name,
-      })
+      .select()
       .from(Categories)
       .where(eq(Categories.Is_deleted, false))
       .orderBy(Categories.Name);

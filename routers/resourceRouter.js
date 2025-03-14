@@ -10,6 +10,8 @@ const verifyToken = require("../middleware/verifyTokens");
 const router = express.Router();
 router.use(express.json());
 const { config } = require("dotenv");
+const { Categories } = require("../db/categorySchema");
+const { Users } = require("../db/userSchema");
 
 config();
 
@@ -190,10 +192,23 @@ router.get("/all", verifyToken, async (req, res) => {
   try {
     const result = await db
       .select({
+        id: Resources.id,
         Name: Resources.Name,
+        Category_id: Resources.Category_id,
+        Category: Categories,
+        Is_deleted: Resources.Is_deleted,
+        Created_at: Resources.Created_at,
+        Created_by: Resources.Created_by,
+        CreatedBy: Users,
+        Updated_at: Resources.Updated_at,
+        Updated_by: Resources.Updated_by,
+        Deleted_at: Resources.Deleted_at,
+        Deleted_by: Resources.Deleted_by,
       })
       .from(Resources)
       .where(eq(Resources.Is_deleted, false))
+      .innerJoin(Categories, eq(Categories.id, Resources.Category_id))
+      .innerJoin(Users, eq(Users.id, Resources.Created_by))
       .orderBy(Resources.Name);
     if (result.length === 0) {
       return res.status(404).json({ message: "No data available" });

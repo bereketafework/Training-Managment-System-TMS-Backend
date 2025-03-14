@@ -1,4 +1,4 @@
-const { Sessions } = require("./sessionSchema");
+// Desc: Schema for Guests table
 const { Users } = require("./userSchema");
 const {
   integer,
@@ -11,9 +11,6 @@ const {
 
 const Guests = pgTable("Guests", {
   id: uuid().defaultRandom().primaryKey(),
-  Session_id: uuid()
-    .notNull()
-    .references(() => Sessions.id),
   First_name: varchar().notNull(),
   Middle_name: varchar().notNull(),
   Last_name: varchar().notNull(),

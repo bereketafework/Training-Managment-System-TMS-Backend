@@ -8,7 +8,7 @@ const courseValidation = Joi.object({
     "string.max": `" Course_title" should have a maximum length of {#limit}`,
     "any.required": `" Course_title" is a required field`,
   }),
-  Course_description: Joi.string().min(3).max(30).required().messages({
+  Course_description: Joi.string().min(3).max(300).required().messages({
     "string.base": `" Course_description" should be a type of 'text'`,
     "string.empty": `" Course_description" cannot be an empty field`,
     "string.min": `" Course_description" should have a minimum length of {#limit}`,
@@ -23,7 +23,7 @@ const courseValidation = Joi.object({
     "any.required": `"  Prerequests" is a required field`,
   }),
 
-  Course_objective: Joi.string().min(3).max(30).required().messages({
+  Course_objective: Joi.string().min(3).max(300).required().messages({
     "string.base": `"Course_objective" should be a type of 'text'`,
     "string.empty": `"Course_objective" cannot be an empty field`,
     "string.min": `"Course_objective" should have a minimum length of {#limit}`,

@@ -2,13 +2,6 @@ const Joi = require("joi");
 
 const sessionValidation = Joi.object({
   Training_id: Joi.string().uuid().required(),
-  Duration: Joi.string().min(3).max(30).required().messages({
-    "string.base": `"training_name" should be a type of 'text'`,
-    "string.empty": `"training_name" cannot be an empty field`,
-    "string.min": `"training_name" should have a minimum length of {#limit}`,
-    "string.max": `"training_name" should have a maximum length of {#limit}`,
-    "any.required": `"training_name" is a required field`,
-  }),
   Topic: Joi.string().min(3).max(30).required().messages({
     "string.base": `"training_mode" should be a type of 'text'`,
     "string.empty": `"training_mode" cannot be an empty field`,

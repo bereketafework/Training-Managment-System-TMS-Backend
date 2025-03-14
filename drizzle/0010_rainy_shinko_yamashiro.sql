@@ -1,0 +1,1 @@
+ALTER TABLE "Trainings" RENAME COLUMN "Price" TO "Cost";

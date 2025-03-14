@@ -208,9 +208,7 @@ router.get("/deleted", verifyToken, async (req, res) => {
 router.get("/all", verifyToken, async (req, res) => {
   try {
     const result = await db
-      .select({
-        Methods: PaymentMethod.Methods,
-      })
+      .select()
       .from(PaymentMethod)
       .where(eq(PaymentMethod.Is_deleted, false))
       .orderBy(PaymentMethod.Methods);

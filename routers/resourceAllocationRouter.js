@@ -11,6 +11,10 @@ const router = express.Router();
 router.use(express.json());
 const { config } = require("dotenv");
 const validateResourceAllocation = require("../validation/resourceAllocationValidation");
+const { Users } = require("../db/userSchema");
+const { Resources } = require("../db/resourceSchema");
+const { Sessions } = require("../db/sessionSchema");
+const { Trainings } = require("../db/trainingSchema");
 
 config();
 
@@ -207,12 +211,25 @@ router.get("/deleted", verifyToken, async (req, res) => {
 });
 
 //list of active users
-router.get("/all", verifyToken, async (req, res) => {
+router.post("/allallocatedresource", verifyToken, async (req, res) => {
   try {
+    const { tid } = req.body;
     const result = await db
-      .select()
+      .select({
+        ...ResourceAllocation,
+        Resource: Resources,
+        Session: Sessions,
+        CreatedBy: Users,
+        Training: Trainings,
+      })
       .from(ResourceAllocation)
-      .where(eq(ResourceAllocation.Is_deleted, false));
+      .innerJoin(Users, eq(Users.id, ResourceAllocation.Created_by))
+      .innerJoin(Resources, eq(Resources.id, ResourceAllocation.Resource_id))
+      .innerJoin(Sessions, eq(Sessions.id, ResourceAllocation.Session_id))
+      .innerJoin(Trainings, eq(Trainings.id, Sessions.Training_id))
+      .where(
+        and(eq(ResourceAllocation.Is_deleted, false), eq(Trainings.id, tid))
+      );
 
     if (result.length === 0) {
       return res.status(404).json({ message: "No data available" });
