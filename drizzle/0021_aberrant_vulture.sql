@@ -1,0 +1,1 @@
+ALTER TABLE "Enrollments" ADD CONSTRAINT "Enrollments_Participant_id_unique" UNIQUE("Participant_id");

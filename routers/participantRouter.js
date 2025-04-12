@@ -2,7 +2,7 @@ const express = require("express");
 const { hashPassword } = require("../validation/passHashing");
 const validateParticipant = require("../validation/participantValidation");
 const { Participant } = require("../db/participantSchema");
-const { eq, ilike, and } = require("drizzle-orm");
+const { eq, sql, and } = require("drizzle-orm");
 
 const db = require("../db");
 const verifyToken = require("../middleware/verifyTokens");
@@ -153,9 +153,7 @@ router.post("/delete/:id", verifyToken, async (req, res) => {
         Deleted_at: new Date(),
       })
       .where(eq(Participant.id, Id));
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(200).send("Successfully deleted");
   } catch (error) {
     if (error.code) {
@@ -192,9 +190,7 @@ router.get("/deleted", verifyToken, async (req, res) => {
       .from(Participant)
       .where(eq(Participant.Is_deleted, true))
       .orderBy(Participant.First_name, Participant.Middle_name);
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
@@ -203,16 +199,20 @@ router.get("/deleted", verifyToken, async (req, res) => {
 });
 
 //list of active users
-router.get("/all", verifyToken, async (req, res) => {
+router.get("/allparticipant", verifyToken, async (req, res) => {
   try {
     const result = await db
-      .select()
+      .select({
+        ...Participant,
+        Fullname:
+          sql`CONCAT_WS(' ', ${Participant.First_name}, ${Participant.Middle_name}, ${Participant.Last_name})`.as(
+            "Fullname"
+          ),
+      })
       .from(Participant)
       .where(eq(Participant.Is_deleted, false))
       .orderBy(Participant.First_name, Participant.Middle_name);
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
@@ -232,9 +232,7 @@ router.get("/search/:id", verifyToken, async (req, res) => {
       })
       .from(Participant)
       .where(and(eq(Participant.Is_deleted, false), eq(Participant.id, id)));
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(201).json(result);
   } catch (error) {
     console.error(error);

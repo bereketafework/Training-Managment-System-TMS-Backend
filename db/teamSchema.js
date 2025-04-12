@@ -1,5 +1,8 @@
 const { Users } = require("./userSchema");
 const { Trainings } = require("./trainingSchema");
+const { Sessions } = require("./sessionSchema");
+const { TeamRoles } = require("./teamRoleSchema");
+
 const {
   integer,
   pgTable,
@@ -13,10 +16,19 @@ const {
 
 const Teams = pgTable("Teams", {
   id: uuid().defaultRandom().primaryKey().notNull(),
-  Training_id: uuid()
+  // Training_id: uuid()
+  //   .notNull()
+  //   .references(() => Trainings.id),
+  User_id: uuid()
     .notNull()
-    .references(() => Trainings.id),
-  Name: varchar().unique().notNull(),
+    .references(() => Users.id),
+  Session_id: uuid()
+    .notNull()
+    .references(() => Sessions.id),
+  Team_role_id: uuid()
+    .notNull()
+    .references(() => TeamRoles.id),
+  // Name: varchar().unique().notNull(),
   Created_at: timestamp().defaultNow(),
   Updated_at: timestamp(),
   Deleted_at: timestamp(),

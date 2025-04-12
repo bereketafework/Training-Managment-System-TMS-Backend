@@ -9,8 +9,63 @@ const router = express.Router();
 router.use(express.json());
 const { config } = require("dotenv");
 const validateEnrollment = require("../validation/enrollmentValidation");
+const { Participant } = require("../db/participantSchema");
+const { Trainings } = require("../db/trainingSchema");
+const { Users } = require("../db/userSchema");
 
 config();
+
+router.post("/select", verifyToken, async (req, res) => {
+  const { tid } = req.body;
+
+  try {
+    const result = await db
+      .select({
+        id: Enrollments.id,
+        Participant_id: Enrollments.Participant_id,
+        Participant: { ...Participant },
+        Training_id: Enrollments.Training_id,
+        Training: { ...Trainings },
+        Created_at: Enrollments.Created_at,
+        Created_by: Enrollments.Created_by,
+        CreatedBy: { ...Users },
+        Updated_at: Enrollments.Updated_at,
+        Updated_by: Enrollments.Updated_by,
+        Is_deleted: Enrollments.Is_deleted,
+        Deleted_at: Enrollments.Deleted_at,
+        Deleted_by: Enrollments.Deleted_by,
+      })
+      .from(Enrollments)
+      .innerJoin(Participant, eq(Participant.id, Enrollments.Participant_id))
+      .innerJoin(Trainings, eq(Trainings.id, Enrollments.Training_id))
+      .innerJoin(Users, eq(Users.id, Enrollments.Created_by))
+      .where(
+        and(eq(Enrollments.Is_deleted, false), eq(Enrollments.Training_id, tid))
+      );
+    res.status(200).send(result);
+  } catch (error) {
+    console.error(error);
+    if (error.code) {
+      switch (error.code) {
+        case "23505": // Unique violation
+          res.status(400).json({ error: "Duplicate entry detected." });
+          break;
+        case "23503": // Foreign key violation
+          res.status(400).json({ error: "Invalid foreign key reference." });
+          break;
+        case "23502": // Not null violation
+          res.status(400).json({ error: "Missing required field." });
+          break;
+        default:
+          res
+            .status(500)
+            .json({ error: "An unexpected database error occurred." });
+      }
+    } else {
+      res.status(500).json({ error: "An unexpected error occurred." });
+    }
+  }
+});
 
 // create a new users also validate a users data and Check Token
 router.post("/create", validateEnrollment, verifyToken, async (req, res) => {
@@ -28,9 +83,7 @@ router.post("/create", validateEnrollment, verifyToken, async (req, res) => {
         Created_by: userid,
       })
       .returning();
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(200).send(result);
   } catch (error) {
     console.error(error);
@@ -155,9 +208,7 @@ router.post("/delete/:id", verifyToken, async (req, res) => {
         Deleted_at: new Date(),
       })
       .where(eq(Enrollments.id, Id));
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(200).send("Successfully deleted");
   } catch (error) {
     if (error.code) {
@@ -189,9 +240,7 @@ router.get("/deleted", verifyToken, async (req, res) => {
       .select()
       .from(Enrollments)
       .where(eq(Enrollments.Is_deleted, true));
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
@@ -203,13 +252,27 @@ router.get("/deleted", verifyToken, async (req, res) => {
 router.get("/all", verifyToken, async (req, res) => {
   try {
     const result = await db
-      .select()
+      .select({
+        id: Enrollments.id,
+        Participant_id: Enrollments.Participant_id,
+        Participant: { ...Participant },
+        Training_id: Enrollments.Training_id,
+        Training: { ...Trainings },
+        Created_at: Enrollments.Created_at,
+        Created_by: Enrollments.Created_by,
+        CreatedBy: { ...Users },
+        Updated_at: Enrollments.Updated_at,
+        Updated_by: Enrollments.Updated_by,
+        Is_deleted: Enrollments.Is_deleted,
+        Deleted_at: Enrollments.Deleted_at,
+        Deleted_by: Enrollments.Deleted_by,
+      })
       .from(Enrollments)
+      .innerJoin(Participant, eq(Participant.id, Enrollments.Participant_id))
+      .innerJoin(Trainings, eq(Trainings.id, Enrollments.Training_id))
+      .innerJoin(Users, eq(Users.id, Enrollments.Created_by))
       .where(eq(Enrollments.Is_deleted, false));
 
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
@@ -225,9 +288,7 @@ router.get("/search/:id", verifyToken, async (req, res) => {
       .select()
       .from(Enrollments)
       .where(and(eq(Enrollments.Is_deleted, false), eq(Enrollments.id, id)));
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(201).json(result);
   } catch (error) {
     console.error(error);

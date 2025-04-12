@@ -7,9 +7,7 @@ const db = require("../db");
 const { Teams } = require("../db/teamSchema");
 
 const teamRoleValidation = Joi.object({
-  User_id: Joi.string().uuid().required(),
-  Team_id: Joi.string().uuid().required(),
-  Role: Joi.string().min(3).max(30).required().messages({
+  Team_role: Joi.string().min(3).max(30).required().messages({
     "string.base": `" Role" should be a type of 'text'`,
     "string.empty": `" Role" cannot be an empty field`,
     "string.min": `" Role" should have a minimum length of {#limit}`,
@@ -29,25 +27,7 @@ const validateTeamRole = async (req, res, next) => {
     }));
     return res.status(400).json({ errors: formattedErrors });
   }
-  // Check if Training_id exists
-  const userArray = await db
-    .select()
-    .from(Users)
-    .where(and(eq(Users.id, value.User_id), eq(Users.Is_deleted, false)));
-  if (!userArray || userArray.length === 0) {
-    return res.status(400).json({
-      errors: [{ path: "User_id", message: "User_id does not exist" }],
-    });
-  }
-  const teamArray = await db
-    .select()
-    .from(Teams)
-    .where(and(eq(Teams.id, value.Team_id), eq(Teams.Is_deleted, false)));
-  if (!teamArray || teamArray.length === 0) {
-    return res.status(400).json({
-      errors: [{ path: "Team_id", message: "Team_id does not exist" }],
-    });
-  }
+
   req.body = value;
   next();
 };

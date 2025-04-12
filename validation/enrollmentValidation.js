@@ -5,16 +5,6 @@ const { Trainings } = require("../db/trainingSchema");
 const EnrollmentValidation = Joi.object({
   Participant_id: Joi.string().uuid().required(),
   Training_id: Joi.string().uuid().required(),
-  Enrollment_date: Joi.date().iso().required().messages({
-    "date.base": `"training_start_date" should be a valid date`,
-    "date.format": `"training_start_date" should be in ISO format`,
-    "any.required": `"training_start_date" is a required field`,
-  }),
-  Complation_date: Joi.date().iso().required().messages({
-    "date.base": `"training_start_date" should be a valid date`,
-    "date.format": `"training_start_date" should be in ISO format`,
-    "any.required": `"training_start_date" is a required field`,
-  }),
 });
 
 module.exports = EnrollmentValidation;

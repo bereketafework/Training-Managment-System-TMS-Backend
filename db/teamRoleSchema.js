@@ -14,13 +14,10 @@ const {
 
 const TeamRoles = pgTable("Team_roles", {
   id: uuid().defaultRandom().primaryKey().notNull(),
-  User_id: uuid()
-    .notNull()
-    .references(() => Users.id),
-  Team_id: uuid()
-    .notNull()
-    .references(() => Teams.id),
-  Role: varchar().unique().notNull(),
+  // Team_id: uuid()
+  //   .notNull()
+  //   .references(() => Teams.id),
+  Team_role: varchar().unique().notNull(),
   Created_at: timestamp().defaultNow(),
   Updated_at: timestamp(),
   Deleted_at: timestamp(),

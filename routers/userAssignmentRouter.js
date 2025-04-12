@@ -161,9 +161,7 @@ router.post("/delete/:id", verifyToken, async (req, res) => {
         Deleted_at: new Date(),
       })
       .where(eq(UserAssignment.id, Id));
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(200).send("Successfully deleted");
   } catch (error) {
     if (error.code) {
@@ -195,9 +193,7 @@ router.get("/deleted", verifyToken, async (req, res) => {
       .select()
       .from(UserAssignment)
       .where(eq(UserAssignment.Is_deleted, true));
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
@@ -213,9 +209,6 @@ router.get("/all", verifyToken, async (req, res) => {
       .from(UserAssignment)
       .where(eq(UserAssignment.Is_deleted, false));
 
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
@@ -233,9 +226,7 @@ router.get("/search/:id", verifyToken, async (req, res) => {
       .where(
         and(eq(UserAssignment.Is_deleted, false), eq(UserAssignment.id, id))
       );
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(201).json(result);
   } catch (error) {
     console.error(error);

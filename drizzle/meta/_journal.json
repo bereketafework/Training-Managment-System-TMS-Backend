@@ -127,6 +127,83 @@
       "when": 1741877136934,
       "tag": "0017_kind_giant_man",
       "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1741963027879,
+      "tag": "0018_awesome_arachne",
+      "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1741963182735,
+      "tag": "0019_cool_sleeper",
+      "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1742311967942,
+      "tag": "0020_slim_magdalene",
+      "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1742394342535,
+      "tag": "0021_aberrant_vulture",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1743002205828,
+      "tag": "0022_petite_callisto",
+      "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1743935827289,
+      "tag": "0023_friendly_the_stranger",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1744385211291,
+      "tag": "0024_military_devos",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1744385612652,
+      "tag": "0025_light_lightspeed",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1744385882385,
+      "tag": "0026_sad_lilandra",
+      "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1744386155055,
+      "tag": "0027_shocking_sabretooth",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1744449945352,
+      "tag": "0028_cute_otto_octavius",
+      "breakpoints": true
     }
   ]
 }

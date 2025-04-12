@@ -6,6 +6,7 @@ const {
   timestamp,
   boolean,
   uuid,
+  unique,
 } = require("drizzle-orm/pg-core");
 
 const Courses = pgTable("Courses", {

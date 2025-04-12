@@ -10,21 +10,22 @@ const {
   date,
   doublePrecision,
 } = require("drizzle-orm/pg-core");
-const { Participant } = require("./participantSchema");
+
 const { Enrollments } = require("./enrollmentSchema");
+const { Trainings } = require("./trainingSchema");
 
 const Certificate = pgTable("Certificates", {
   id: uuid().defaultRandom().primaryKey().notNull(),
-  Participant_id: uuid()
+  Training_id: uuid()
     .notNull()
-    .references(() => Participant.id),
-  Enrollment_id: uuid()
-    .notNull()
-    .references(() => Enrollments.id),
-  Name: varchar().notNull(),
-  Text: varchar().notNull(),
+    .references(() => Trainings.id),
+  // Enrollment_id: uuid()
+  //   .notNull()
+  //   .references(() => Enrollments.id),
+  Title: varchar().notNull(),
+  Description: varchar().notNull(),
   Issue_date: date().notNull(),
-  Expire_date: date().notNull(),
+  Expire_date: date(),
   Created_at: timestamp().defaultNow(),
   Updated_at: timestamp(),
   Deleted_at: timestamp(),

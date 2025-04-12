@@ -186,9 +186,7 @@ router.post("/delete/:id", verifyToken, async (req, res) => {
         Deleted_at: new Date(),
       })
       .where(eq(Sessions.id, Id));
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(200).send("Successfully deleted");
   } catch (error) {
     if (error.code) {
@@ -220,9 +218,7 @@ router.get("/deleted", verifyToken, async (req, res) => {
       .select({ Topic: Sessions.Topic, Duration: Sessions.Duration })
       .from(Sessions)
       .where(eq(Sessions.Is_deleted, true));
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
@@ -242,9 +238,6 @@ router.get("/all", verifyToken, async (req, res) => {
       .innerJoin(Trainings, eq(Trainings.id, Sessions.Training_id))
       .where(eq(Sessions.Is_deleted, false));
 
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
@@ -260,9 +253,7 @@ router.get("/search/:id", verifyToken, async (req, res) => {
       .select({ Topic: Sessions.Topic, Duration: Sessions.Duration })
       .from(Sessions)
       .where(and(eq(Sessions.Is_deleted, false), eq(Sessions.id, id)));
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(201).json(result);
   } catch (error) {
     console.error(error);

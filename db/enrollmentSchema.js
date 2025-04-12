@@ -20,8 +20,6 @@ const Enrollments = pgTable("Enrollments", {
   Training_id: uuid()
     .notNull()
     .references(() => Trainings.id),
-  Enrollment_date: date().notNull(),
-  Complation_date: date().notNull(),
   Created_at: timestamp().defaultNow(),
   Updated_at: timestamp(),
   Deleted_at: timestamp(),

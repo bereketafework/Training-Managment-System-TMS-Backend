@@ -29,9 +29,7 @@ router.post("/create", validateCategory, verifyToken, async (req, res) => {
         Created_by: userid,
       })
       .returning();
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(200).send(result);
   } catch (error) {
     console.error(error);
@@ -156,9 +154,7 @@ router.post("/delete/:id", verifyToken, async (req, res) => {
         Deleted_at: new Date(),
       })
       .where(eq(Categories.id, Id));
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(200).send("Successfully deleted");
   } catch (error) {
     if (error.code) {
@@ -193,9 +189,7 @@ router.get("/deleted", verifyToken, async (req, res) => {
       .from(Categories)
       .where(eq(Categories.Is_deleted, true))
       .orderBy(Categories.Name);
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
@@ -211,9 +205,7 @@ router.get("/all", verifyToken, async (req, res) => {
       .from(Categories)
       .where(eq(Categories.Is_deleted, false))
       .orderBy(Categories.Name);
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
@@ -229,9 +221,7 @@ router.get("/search/:id", verifyToken, async (req, res) => {
       .select({ Name: Categories.Name })
       .from(Categories)
       .where(and(eq(Categories.Is_deleted, false), eq(Categories.id, id)));
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(201).json(result);
   } catch (error) {
     console.error(error);

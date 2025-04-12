@@ -144,9 +144,7 @@ router.post("/delete/:id", verifyToken, async (req, res) => {
         Deleted_at: new Date(),
       })
       .where(eq(Trainings.id, trainingid));
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(200).send("Successfully deleted");
   } catch (error) {
     if (error.code) {
@@ -179,9 +177,7 @@ router.get("/deleted", verifyToken, async (req, res) => {
       .from(Trainings)
       .where(eq(Trainings.Is_deleted, true))
       .orderBy(Trainings.Training_name);
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
@@ -201,9 +197,7 @@ router.get("/all", verifyToken, async (req, res) => {
       .where(eq(Trainings.Is_deleted, false))
       .innerJoin(Courses, eq(Courses.id, Trainings.Course_id))
       .orderBy(Trainings.Training_name);
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
@@ -225,9 +219,6 @@ router.get("/search/:id", verifyToken, async (req, res) => {
       .innerJoin(Users, eq(Users.id, Trainings.Created_by))
       .innerJoin(Courses, eq(Courses.id, Trainings.Course_id));
 
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
     res.status(201).json(result);
   } catch (error) {
     if (error.code) {

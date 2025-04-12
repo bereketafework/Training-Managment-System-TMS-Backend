@@ -1,0 +1,1 @@
+ALTER TABLE "Courses" ALTER COLUMN "Prerequests" DROP NOT NULL;

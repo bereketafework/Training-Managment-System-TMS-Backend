@@ -10,6 +10,7 @@ const verifyToken = require("../middleware/verifyTokens");
 const router = express.Router();
 router.use(express.json());
 const { config } = require("dotenv");
+const { Users } = require("../db/userSchema");
 
 config();
 
@@ -29,9 +30,7 @@ router.post("/create", validateTeamRole, verifyToken, async (req, res) => {
         Created_by: userid,
       })
       .returning();
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(200).send(result);
   } catch (error) {
     console.error(error);
@@ -138,9 +137,7 @@ router.post("/delete/:id", verifyToken, async (req, res) => {
         Deleted_at: new Date(),
       })
       .where(eq(TeamRoles.id, Id));
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(200).send("Successfully deleted");
   } catch (error) {
     if (error.code) {
@@ -173,9 +170,6 @@ router.get("/deleted", verifyToken, async (req, res) => {
       .from(TeamRoles)
       .where(eq(TeamRoles.Is_deleted, true));
 
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
@@ -184,16 +178,17 @@ router.get("/deleted", verifyToken, async (req, res) => {
 });
 
 //list of active users
-router.get("/all", verifyToken, async (req, res) => {
+router.get("/allteamroles", verifyToken, async (req, res) => {
   try {
     const result = await db
-      .select()
+      .select({
+        ...TeamRoles,
+        CreatedBy: Users,
+      })
       .from(TeamRoles)
-      .where(eq(TeamRoles.Is_deleted, false));
+      .where(eq(TeamRoles.Is_deleted, false))
+      .innerJoin(Users, eq(Users.id, TeamRoles.Created_by));
 
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
@@ -209,9 +204,7 @@ router.get("/search/:id", verifyToken, async (req, res) => {
       .select()
       .from(TeamRoles)
       .where(and(eq(TeamRoles.Is_deleted, false), eq(TeamRoles.id, id)));
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(201).json(result);
   } catch (error) {
     console.error(error);

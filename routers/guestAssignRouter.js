@@ -37,9 +37,9 @@ router.post(
           Created_by: userid,
         })
         .returning();
-      if (result.length === 0) {
-        return res.status(404).json({ message: "No data available" });
-      }
+      // if (result.length === 0) {
+      // //   return res.status(404).json({ message: "No data available" });
+      // // }
       res.status(200).send(result);
     } catch (error) {
       console.error(error);
@@ -84,9 +84,9 @@ router.post("/delete/:id", verifyToken, async (req, res) => {
         Deleted_at: new Date(),
       })
       .where(eq(GuestAssign.id, Id));
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+    // if (result.length === 0) {
+    //   return res.status(404).json({ message: "No data available" });
+    // }
     res.status(200).send("Successfully deleted");
   } catch (error) {
     if (error.code) {
@@ -118,9 +118,9 @@ router.get("/deleted", verifyToken, async (req, res) => {
       .select()
       .from(GuestAssign)
       .where(eq(GuestAssign.Is_deleted, true));
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+    // if (result.length === 0) {
+    //   return res.status(404).json({ message: "No data available" });
+    // }
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
@@ -142,9 +142,9 @@ router.get("/allassignedguests", verifyToken, async (req, res) => {
       .innerJoin(Trainings, eq(GuestAssign.Training_id, Trainings.id))
       .innerJoin(Guests, eq(GuestAssign.Guest_id, Guests.id));
 
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+    // if (result.length === 0) {
+    //   return res.status(404).json({ message: "No data available" });
+    // }
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
@@ -169,9 +169,9 @@ router.post("/selectedassignedguests", verifyToken, async (req, res) => {
       .innerJoin(Guests, eq(GuestAssign.Guest_id, Guests.id))
       .innerJoin(Sessions, eq(GuestAssign.Sessions_id, Sessions.id));
 
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+    // if (result.length === 0) {
+    //   return res.status(404).json({ message: "No data available" });
+    // }
     res.status(201).json(result);
   } catch (error) {
     console.error(error);

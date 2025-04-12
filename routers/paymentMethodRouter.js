@@ -29,9 +29,7 @@ router.post("/create", validatePaymentMethod, verifyToken, async (req, res) => {
         Created_by: userid,
       })
       .returning();
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(200).send(result);
   } catch (error) {
     console.error(error);
@@ -156,9 +154,7 @@ router.post("/delete/:id", verifyToken, async (req, res) => {
         Deleted_at: new Date(),
       })
       .where(eq(PaymentMethod.id, Id));
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(200).send("Successfully deleted");
   } catch (error) {
     res.status(500).json({ error: "An unexpected error occurred" });
@@ -194,9 +190,7 @@ router.get("/deleted", verifyToken, async (req, res) => {
       .from(PaymentMethod)
       .where(eq(PaymentMethod.Is_deleted, true))
       .orderBy(PaymentMethod.Methods);
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
@@ -212,9 +206,7 @@ router.get("/all", verifyToken, async (req, res) => {
       .from(PaymentMethod)
       .where(eq(PaymentMethod.Is_deleted, false))
       .orderBy(PaymentMethod.Methods);
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
@@ -232,9 +224,7 @@ router.get("/search/:id", verifyToken, async (req, res) => {
       .where(
         and(eq(PaymentMethod.Is_deleted, false), eq(PaymentMethod.id, id))
       );
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(201).json(result);
   } catch (error) {
     console.error(error);

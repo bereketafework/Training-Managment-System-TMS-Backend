@@ -164,9 +164,7 @@ router.post("/delete/:id", verifyToken, async (req, res) => {
         Deleted_at: new Date(),
       })
       .where(eq(Users.id, UsersId));
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(200).send("Successfully deleted");
   } catch (error) {
     if (error.code) {
@@ -202,9 +200,7 @@ router.get("/deleted", verifyToken, async (req, res) => {
       .from(Users)
       .where(eq(Users.Is_deleted, true))
       .orderBy(Users.First_name, Users.Middle_name, Users.Last_name);
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
@@ -219,9 +215,7 @@ router.get("/all", verifyToken, async (req, res) => {
       .from(Users)
       .where(eq(Users.Is_deleted, false))
       .orderBy(Users.First_name, Users.Middle_name, Users.Last_name);
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
@@ -229,21 +223,30 @@ router.get("/all", verifyToken, async (req, res) => {
   }
 });
 //search a users full information in db
-router.get("/search/:id", verifyToken, async (req, res) => {
-  const { id } = req.params;
+router.post("/search", verifyToken, async (req, res) => {
+  const { id } = req.body;
   try {
     const result = await db
       .select({
+        id: Users.id,
         First_name: Users.First_name,
         Middle_name: Users.Middle_name,
         Last_name: Users.Last_name,
-        Usersname: Users.Username,
+        Email: Users.Email,
+        Phone: Users.Phone,
+        Company: Users.Company,
+        Username: Users.Username,
+        Created_at: Users.Created_at,
+        Updated_at: Users.Updated_at,
+        Created_by: Users.Created_by,
+        Updated_by: Users.Updated_by,
+        Deleted_at: Users.Deleted_at,
+        Deleted_by: Users.Deleted_by,
+        Is_deleted: Users.Is_deleted,
       })
       .from(Users)
       .where(and(eq(Users.Is_deleted, false), eq(Users.id, id)));
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(201).json(result);
   } catch (error) {
     console.error(error);

@@ -13,6 +13,39 @@ const { config } = require("dotenv");
 
 config();
 
+router.post("/select", verifyToken, async (req, res) => {
+  const { tid } = req.body;
+
+  try {
+    const result = await db
+      .select()
+      .from(Certificate)
+      .where(and(eq(Certificate.Is_deleted, false), eq(Certificate.id, tid)));
+    res.status(200).send(result);
+  } catch (error) {
+    console.error(error);
+    if (error.code) {
+      switch (error.code) {
+        case "23505": // Unique violation
+          res.status(400).json({ error: "Duplicate entry detected." });
+          break;
+        case "23503": // Foreign key violation
+          res.status(400).json({ error: "Invalid foreign key reference." });
+          break;
+        case "23502": // Not null violation
+          res.status(400).json({ error: "Missing required field." });
+          break;
+        default:
+          res
+            .status(500)
+            .json({ error: "An unexpected database error occurred." });
+      }
+    } else {
+      res.status(500).json({ error: "An unexpected error occurred." });
+    }
+  }
+});
+
 // create a new users also validate a users data and Check Token
 router.post("/create", validateCertificate, verifyToken, async (req, res) => {
   const data = req.body;
@@ -29,9 +62,7 @@ router.post("/create", validateCertificate, verifyToken, async (req, res) => {
         Created_by: userid,
       })
       .returning();
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(200).send(result);
   } catch (error) {
     console.error(error);
@@ -156,9 +187,7 @@ router.post("/delete/:id", verifyToken, async (req, res) => {
         Deleted_at: new Date(),
       })
       .where(eq(Certificate.id, Id));
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(200).send("Successfully deleted");
   } catch (err) {
     res.status(500).send(err.message);
@@ -172,9 +201,7 @@ router.get("/deleted", verifyToken, async (req, res) => {
       .select()
       .from(Certificate)
       .where(eq(Certificate.Is_deleted, true));
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
@@ -190,9 +217,6 @@ router.get("/all", verifyToken, async (req, res) => {
       .from(Certificate)
       .where(eq(Certificate.Is_deleted, false));
 
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
@@ -208,9 +232,7 @@ router.get("/search/:id", verifyToken, async (req, res) => {
       .select()
       .from(Certificate)
       .where(and(eq(Certificate.Is_deleted, false), eq(certificate.id, id)));
-    if (result.length === 0) {
-      return res.status(404).json({ message: "No data available" });
-    }
+
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
