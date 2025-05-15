@@ -32,6 +32,9 @@ const participantValidation = Joi.object({
   Phone: Joi.number().required().messages({
     "number.base": "Phone number must be a number",
   }),
+  Gender: Joi.string().required().messages({
+    "any.required": `"  Last_name" is a required field`,
+  }),
 });
 
 module.exports = participantValidation;

@@ -1,0 +1,1 @@
+ALTER TABLE "Participants" ADD COLUMN "Gender" varchar NOT NULL;

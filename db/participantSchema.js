@@ -15,6 +15,7 @@ const Participant = pgTable("Participants", {
   Last_name: varchar().notNull(),
   Email: varchar().unique().notNull(),
   Phone: integer().unique().notNull(),
+  Gender: varchar(10).notNull(),
   Created_at: timestamp().defaultNow(),
   Updated_at: timestamp(),
   Deleted_at: timestamp(),

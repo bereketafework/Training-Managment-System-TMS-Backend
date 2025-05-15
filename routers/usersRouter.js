@@ -42,6 +42,9 @@ router.post("/create", validateUser, verifyToken, async (req, res) => {
         case "23503": // Foreign key violation
           res.status(400).json({ error: "Invalid foreign key reference." });
           break;
+        case "22003": // out of range for type integer
+          res.status(400).json({ error: "Invalid Phone Number." });
+          break;
         case "23502": // Not null violation
           res.status(400).json({ error: "Missing required field." });
           break;
@@ -66,16 +69,20 @@ router.post("/login", async (req, res) => {
       .where(and(ilike(Users.Username, Username), eq(Users.Is_deleted, false)));
 
     if (userExists.length === 0) {
-      return res
-        .status(401)
-        .json({ error: "User not found or has been deleted" });
+      return res.status(401).json({
+        error:
+          "Invalid Username or Password,Plese Check Your Credentials and Try Again",
+      });
     }
 
     const user = userExists[0];
     const isPasswordValid = await bcrypt.compare(Password, user.Password);
 
     if (!isPasswordValid) {
-      return res.status(401).json({ error: "Invalid password" });
+      return res.status(401).json({
+        error:
+          "Invalid Username or Password,Plese Check Your Credentials and Try Again",
+      });
     }
 
     const token = jwt.sign({ id: user.id, Username }, "tms", {

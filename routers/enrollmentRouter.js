@@ -12,8 +12,12 @@ const validateEnrollment = require("../validation/enrollmentValidation");
 const { Participant } = require("../db/participantSchema");
 const { Trainings } = require("../db/trainingSchema");
 const { Users } = require("../db/userSchema");
+const checkEnrollmentCapacity = require("../middleware/enrollmentCapacityChecking");
 
 config();
+router.post("/test", checkEnrollmentCapacity, verifyToken, async (req, res) => {
+  const { tid } = req.body;
+});
 
 router.post("/select", verifyToken, async (req, res) => {
   const { tid } = req.body;
@@ -68,46 +72,52 @@ router.post("/select", verifyToken, async (req, res) => {
 });
 
 // create a new users also validate a users data and Check Token
-router.post("/create", validateEnrollment, verifyToken, async (req, res) => {
-  const data = req.body;
-  const { user: idFromToken } = req;
-  if (!idFromToken || !idFromToken.id) {
-    return res.status(400).json({ error: "Invalid token data." });
-  }
-  const userid = idFromToken.id;
-  try {
-    const result = await db
-      .insert(Enrollments)
-      .values({
-        ...data,
-        Created_by: userid,
-      })
-      .returning();
+router.post(
+  "/create",
+  checkEnrollmentCapacity,
+  validateEnrollment,
+  verifyToken,
+  async (req, res) => {
+    const data = req.body;
+    const { user: idFromToken } = req;
+    if (!idFromToken || !idFromToken.id) {
+      return res.status(400).json({ error: "Invalid token data." });
+    }
+    const userid = idFromToken.id;
+    try {
+      const result = await db
+        .insert(Enrollments)
+        .values({
+          ...data,
+          Created_by: userid,
+        })
+        .returning();
 
-    res.status(200).send(result);
-  } catch (error) {
-    console.error(error);
-    if (error.code) {
-      switch (error.code) {
-        case "23505": // Unique violation
-          res.status(400).json({ error: "Duplicate entry detected." });
-          break;
-        case "23503": // Foreign key violation
-          res.status(400).json({ error: "Invalid foreign key reference." });
-          break;
-        case "23502": // Not null violation
-          res.status(400).json({ error: "Missing required field." });
-          break;
-        default:
-          res
-            .status(500)
-            .json({ error: "An unexpected database error occurred." });
+      res.status(200).send(result);
+    } catch (error) {
+      console.error(error);
+      if (error.code) {
+        switch (error.code) {
+          case "23505": // Unique violation
+            res.status(400).json({ error: "Duplicate entry detected." });
+            break;
+          case "23503": // Foreign key violation
+            res.status(400).json({ error: "Invalid foreign key reference." });
+            break;
+          case "23502": // Not null violation
+            res.status(400).json({ error: "Missing required field." });
+            break;
+          default:
+            res
+              .status(500)
+              .json({ error: "An unexpected database error occurred." });
+        }
+      } else {
+        res.status(500).json({ error: "An unexpected error occurred." });
       }
-    } else {
-      res.status(500).json({ error: "An unexpected error occurred." });
     }
   }
-});
+);
 
 // update user Information by user id
 router.post("/update/:id", verifyToken, async (req, res) => {
