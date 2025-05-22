@@ -10,6 +10,7 @@ const verifyToken = require("../middleware/verifyTokens");
 const router = express.Router();
 router.use(express.json());
 const { config } = require("dotenv");
+const { Users } = require("../db/userSchema");
 
 config();
 
@@ -108,7 +109,7 @@ router.post("/update/:id", verifyToken, async (req, res) => {
       message: Object.keys(filteredUpdatedData) + " successfully updated", // Include the updated fields in the response
     });
   } catch (error) {
-    console.error("Error updating user data:", err);
+    console.error("Error updating user data:", error);
     if (error.code) {
       switch (error.code) {
         case "23505": // Unique violation
@@ -226,12 +227,16 @@ router.get("/search/:id", verifyToken, async (req, res) => {
   try {
     const result = await db
       .select({
-        First_name: Participant.First_name,
-        Middle_name: Participant.Middle_name,
-        Last_name: Participant.Last_name,
+        ...Participant,
+        Created_by: Users,
+        Fullname:
+          sql`CONCAT_WS(' ', ${Participant.First_name}, ${Participant.Middle_name}, ${Participant.Last_name})`.as(
+            "Fullname"
+          ),
       })
       .from(Participant)
-      .where(and(eq(Participant.Is_deleted, false), eq(Participant.id, id)));
+      .where(and(eq(Participant.Is_deleted, false), eq(Participant.id, id)))
+      .innerJoin(Users, eq(Users.id, Participant.Created_by));
 
     res.status(201).json(result);
   } catch (error) {

@@ -11,6 +11,7 @@ const validateTraining = require("../validation/trainingValidation");
 const { validate } = require("uuid");
 const { Courses } = require("../db/courseSchema");
 const { Users } = require("../db/userSchema");
+const { Sessions } = require("../db/sessionSchema");
 
 config();
 
@@ -216,6 +217,45 @@ router.get("/search/:id", verifyToken, async (req, res) => {
       })
       .from(Trainings)
       .where(and(eq(Trainings.Is_deleted, false), eq(Trainings.id, id)))
+      .innerJoin(Users, eq(Users.id, Trainings.Created_by))
+
+      .innerJoin(Courses, eq(Courses.id, Trainings.Course_id));
+
+    res.status(201).json(result);
+  } catch (error) {
+    if (error.code) {
+      switch (error.code) {
+        case "23505": // Unique violation
+          res.status(400).json({ error: "Duplicate entry detected." });
+          break;
+        case "23503": // Foreign key violation
+          res.status(400).json({ error: "Invalid foreign key reference." });
+          break;
+        case "23502": // Not null violation
+          res.status(400).json({ error: "Missing required field." });
+          break;
+        default:
+          res
+            .status(500)
+            .json({ error: "An unexpected database error occurred." });
+      }
+    } else {
+      res.status(500).json({ error: "An unexpected error occurred." });
+    }
+  }
+});
+
+router.post("/select", verifyToken, async (req, res) => {
+  const { tid } = req.body;
+  try {
+    const result = await db
+      .select({
+        ...Trainings,
+        Courses: Courses,
+        CreatedBy: Users,
+      })
+      .from(Trainings)
+      .where(and(eq(Trainings.Is_deleted, false), eq(Trainings.id, tid)))
       .innerJoin(Users, eq(Users.id, Trainings.Created_by))
       .innerJoin(Courses, eq(Courses.id, Trainings.Course_id));
 

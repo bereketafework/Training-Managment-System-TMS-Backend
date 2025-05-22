@@ -230,8 +230,8 @@ router.get("/all", verifyToken, async (req, res) => {
   }
 });
 //search a users full information in db
-router.post("/search", verifyToken, async (req, res) => {
-  const { id } = req.body;
+router.post("/search/:id", verifyToken, async (req, res) => {
+  const { id } = req.params;
   try {
     const result = await db
       .select({
@@ -253,7 +253,6 @@ router.post("/search", verifyToken, async (req, res) => {
       })
       .from(Users)
       .where(and(eq(Users.Is_deleted, false), eq(Users.id, id)));
-
     res.status(201).json(result);
   } catch (error) {
     console.error(error);
