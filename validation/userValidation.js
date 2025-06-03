@@ -37,7 +37,7 @@ const userValidation = Joi.object({
     "string.max": `"password" should have a maximum length of {#limit}`,
     "any.required": `"password" is a required field`,
   }),
-  Company: Joi.string().min(3).max(30).required().messages({
+  Company: Joi.string().min(1).max(30).required().messages({
     "string.base": `"Company" should be a type of 'text'`,
     "string.empty": `"Company" cannot be an empty field`,
     "string.min": `"Company" should have a minimum length of {#limit}`,

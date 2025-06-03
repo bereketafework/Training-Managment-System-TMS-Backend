@@ -15,9 +15,6 @@ const { Users } = require("../db/userSchema");
 const checkEnrollmentCapacity = require("../middleware/enrollmentCapacityChecking");
 
 config();
-router.post("/test", checkEnrollmentCapacity, verifyToken, async (req, res) => {
-  const { tid } = req.body;
-});
 
 router.post("/select", verifyToken, async (req, res) => {
   const { tid } = req.body;

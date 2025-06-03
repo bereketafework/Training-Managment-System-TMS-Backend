@@ -124,7 +124,7 @@ router.post("/update/:id", verifyToken, async (req, res) => {
     } else {
       res.status(500).json({ error: "An unexpected error occurred." });
     }
-    console.error("Error updating Guest data:", err);
+    console.error("Error updating Course data:", error);
   }
 });
 

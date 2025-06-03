@@ -70,8 +70,7 @@ router.post("/login", async (req, res) => {
 
     if (userExists.length === 0) {
       return res.status(401).json({
-        error:
-          "Invalid Username or Password,Plese Check Your Credentials and Try Again",
+        error: "Plese Check Your Credentials and Try Again",
       });
     }
 
@@ -80,8 +79,7 @@ router.post("/login", async (req, res) => {
 
     if (!isPasswordValid) {
       return res.status(401).json({
-        error:
-          "Invalid Username or Password,Plese Check Your Credentials and Try Again",
+        error: "Plese Check Your Credentials and Try Again",
       });
     }
 

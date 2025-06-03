@@ -141,7 +141,7 @@ router.post("/update/:id", verifyToken, async (req, res) => {
       message: Object.keys(filteredUpdatedData) + " successfully updated", // Include the updated fields in the response
     });
   } catch (error) {
-    console.error("Error updating Guest data:", err);
+    console.error("Error updating Session data:", error);
     if (error.code) {
       switch (error.code) {
         case "23505": // Unique violation
