@@ -208,10 +208,7 @@ router.get("/all", verifyToken, async (req, res) => {
         CreatedBy: Users,
       })
       .from(UserRoles)
-      .innerJoin(
-        Users,
-        eq(Users.id, UserRoles.Created_by) && eq(Users.id, UserRoles.User_id)
-      )
+      .innerJoin(Users, eq(Users.id, UserRoles.Created_by))
       .where(eq(UserRoles.Is_deleted, false))
       .orderBy(UserRoles.Role);
 

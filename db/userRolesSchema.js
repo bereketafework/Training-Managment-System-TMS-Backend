@@ -13,9 +13,9 @@ const {
 
 const UserRoles = pgTable("User_roles", {
   id: uuid().defaultRandom().primaryKey().notNull(),
-  User_id: uuid()
-    .notNull()
-    .references(() => Users.id),
+  // User_id: uuid()
+  //   .notNull()
+  //   .references(() => Users.id),
   Role: varchar().unique().notNull(),
   Created_at: timestamp().defaultNow(),
   Updated_at: timestamp(),

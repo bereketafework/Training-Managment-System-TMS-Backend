@@ -6,7 +6,7 @@ const { eq, ilike, and } = require("drizzle-orm");
 const db = require("../db");
 
 const userRoleValidation = Joi.object({
-  User_id: Joi.string().uuid().required(),
+  // User_id: Joi.string().uuid().required(),
   Role: Joi.string().min(3).max(30).required().messages({
     "string.base": `" Role" should be a type of 'text'`,
     "string.empty": `" Role" cannot be an empty field`,
