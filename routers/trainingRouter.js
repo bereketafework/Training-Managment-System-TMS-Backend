@@ -193,10 +193,12 @@ router.get("/all", verifyToken, async (req, res) => {
       .select({
         ...Trainings,
         Courses: Courses,
+        CreatedBy: Users,
       })
       .from(Trainings)
       .where(eq(Trainings.Is_deleted, false))
       .innerJoin(Courses, eq(Courses.id, Trainings.Course_id))
+      .innerJoin(Users, eq(Users.id, Trainings.Created_by))
       .orderBy(Trainings.Training_name);
 
     res.status(201).json(result);
@@ -218,7 +220,6 @@ router.get("/search/:id", verifyToken, async (req, res) => {
       .from(Trainings)
       .where(and(eq(Trainings.Is_deleted, false), eq(Trainings.id, id)))
       .innerJoin(Users, eq(Users.id, Trainings.Created_by))
-
       .innerJoin(Courses, eq(Courses.id, Trainings.Course_id));
 
     res.status(201).json(result);
